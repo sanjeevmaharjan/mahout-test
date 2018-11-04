@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - App",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "mahout_test.App",
+            "args": "",
+            "projectName": "mahout-test",
+            "preLaunchTask": "compile"
+        }
+    ]
+}
