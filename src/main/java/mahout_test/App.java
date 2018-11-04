@@ -6,20 +6,18 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
+import org.apache.mahout.cf.taste.impl.model.jdbc.AbstractJDBCDataModel;
+import org.apache.mahout.cf.taste.impl.model.jdbc.PostgreSQLJDBCDataModel;
+import org.apache.mahout.cf.taste.impl.model.jdbc.ReloadFromJDBCDataModel;
 import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
 import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
 import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
-import org.apache.mahout.cf.taste.model.JDBCDataModel;
 import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
-import org.postgresql.ds.PGPoolingDataSource;
 import org.postgresql.ds.PGSimpleDataSource;
-import org.apache.mahout.cf.taste.impl.model.jdbc.PostgreSQLJDBCDataModel;
-import org.apache.mahout.cf.taste.impl.model.jdbc.AbstractJDBCDataModel;
-//import org.apache.mahout.cf.taste.impl.model.jdbc;
 
 /**
  * Hello world!
@@ -57,9 +55,11 @@ public class App
         dataSource.setPassword(properties.getProperty("datasource.password"));
         dataSource.setPortNumber(Integer.parseInt(properties.getProperty("datasource.port")));
 
-        AbstractJDBCDataModel dataModel = new PostgreSQLJDBCDataModel(dataSource, "prefs", "user_id", "cv_id", "views", null);
+        AbstractJDBCDataModel dataModel = new PostgreSQLJDBCDataModel(dataSource, "preferences", "user_id", "cv_id", "views", "timestamp");
 
-        recommend(dataModel);
+        ReloadFromJDBCDataModel rjdm = new ReloadFromJDBCDataModel(dataModel);
+
+        recommend(rjdm);
     }
 
     private static void recommend(DataModel dataModel) throws Exception {
